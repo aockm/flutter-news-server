@@ -1,11 +1,16 @@
 package com.tockm.utils;
 
+import com.tockm.configuration.SecurityProperties;
+
+import javax.annotation.Resource;
 import java.security.MessageDigest;
 
 public class SHA256WithSalt {
-    public static String sha256WithSalt(String input) {
+
+    public static String sha256WithSalt(String input, String salt) {
+
         try {
-            String salt = "";
+
             // 合并输入和盐值
             String saltedInput = input + salt;
 

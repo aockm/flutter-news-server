@@ -79,6 +79,14 @@ public class UserInfoController extends ABaseController {
 		return getSuccessResponseVo(userInfoService.login(email,password));
 	}
 
+	@RequestMapping("/register")
+	public ResponseVo register(@NotEmpty String username,
+							   @NotEmpty @Email String email,
+							   @NotEmpty String password) throws BusinessException {
+		userInfoService.register(email,username,password);
+		return getSuccessResponseVo("注册成功");
+	}
+
 	@RequestMapping("/test")
 	public ResponseVo login() {
 		return getSuccessResponseVo(null);

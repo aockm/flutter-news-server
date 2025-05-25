@@ -53,4 +53,6 @@ public interface UserInfoService {
 
 	UserInfoVo login(String email, String password) throws BusinessException;
 
+	void register(String email, String username, String password) throws BusinessException;
+
 }

@@ -9,11 +9,13 @@
 		<result column="email" property="email"/>
 		<!---->
 		<result column="password" property="password"/>
+		<!---->
+		<result column="username" property="username"/>
 	</resultMap>
 
 	<!--通用查询结果列-->
 	<sql id="base_column_list" >
-		user_id,email,password
+		user_id,email,password,username
 	</sql>
 
 	<!--基础查询条件-->
@@ -27,6 +29,9 @@
 		<if test="query.password!=null and query.password!='' ">
 			and password = #{query.password}
 		</if>
+		<if test="query.username!=null and query.username!='' ">
+			and username = #{query.username}
+		</if>
 	</sql>
 
 	<!--扩展查询条件列-->
@@ -36,6 +41,9 @@
 		</if>
 		<if test="query.passwordFuzzy!=null and query.passwordFuzzy!='' ">
 			 and password like concat ('%',#{query.passwordFuzzy}, '%')
+		</if>
+		<if test="query.usernameFuzzy!=null and query.usernameFuzzy!='' ">
+			and username like concat ('%',#{query.usernameFuzzy}, '%')
 		</if>
 	</sql>
 
@@ -78,6 +86,9 @@
 			<if test="bean.password!=null">
 				password,
 			</if>
+			<if test="bean.username!=null">
+				username,
+			</if>
 		</trim>
 		<trim prefix="values (" suffix=")" suffixOverrides=",">
 			<if test="bean.userId!=null">
@@ -88,6 +99,9 @@
 			</if>
 			<if test="bean.password!=null">
 				#{bean.password},
+			</if>
+			<if test="bean.username!=null">
+				#{bean.username},
 			</if>
 		</trim>
 	</insert>
@@ -116,6 +130,9 @@
 			<if test="bean.password!=null">
 				#{bean.password},
 			</if>
+			<if test="bean.username!=null">
+				username,
+			</if>
 		</trim>
 		on DUPLICATE key update
 		<trim prefix="" suffix="" suffixOverrides=",">
@@ -128,28 +145,32 @@
 			<if test="bean.password!=null">
 				password = VALUES(password),
 			</if>
+			<if test="bean.username!=null">
+				#{bean.username},
+			</if>
 		</trim>
 	</insert>
 
 	<!--添加（批量插入）-->
 	<insert id="insertBatch" parameterType="com.tockm.entity.po.UserInfo">
-		INSERT INTO user_info(email,password)values
+		INSERT INTO user_info(email,password,username)values
 		<foreach collection="list" item="item" separator=",">
 		(
-			#{item.email},#{item.password}
+			#{item.email},#{item.password},#{item.username}
 		)
 		</foreach>
 	</insert>
 
 	<!-- 批量添加 修改（批量插入）-->
 	<insert id="insertOrUpdateBatch" parameterType="com.tockm.entity.po.UserInfo">
-		INSERT INTO user_info(email,password)values
+		INSERT INTO user_info(email,password,username)values
 		<foreach collection="list" item="item" separator=",">
-			(#{item.email},#{item.password})
+			(#{item.email},#{item.password}),#{item.username})
 		</foreach>
 		on DUPLICATE key update
 		email = VALUES(email),
-		password = VALUES(password)
+		password = VALUES(password),
+		username = VALUES(username)
 	</insert>
 
 	<!-- 根据主键修改 -->
@@ -169,6 +190,9 @@
 			</if>
 			<if test="bean.password!=null">
 				password = #{bean.password},
+			</if>
+			<if test="bean.username!=null">
+				username = #{bean.username},
 			</if>
 		</set>
 		where <include refid="base_query_condition"/>

@@ -1,4 +1,5 @@
 package com.tockm.service.impl;
+import com.tockm.configuration.SecurityProperties;
 import com.tockm.entity.vo.UserInfoVo;
 import com.tockm.exception.BusinessException;
 import com.tockm.service.UserInfoService;
@@ -13,6 +14,7 @@ import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.List;
 import javax.annotation.Resource;;
+import com.tockm.utils.SHA256WithSalt;
 import org.springframework.stereotype.Service;
 
 /**
@@ -23,6 +25,9 @@ import org.springframework.stereotype.Service;
 public class UserInfoServiceImpl implements UserInfoService {
 	@Resource
 	private UserInfoMapper<UserInfo,UserInfoQuery> userInfoMapper;
+
+	@Resource
+	private SecurityProperties securityProperties;
 	/**
 	 * 根据条件查询列表
 	 */
@@ -122,5 +127,18 @@ public class UserInfoServiceImpl implements UserInfoService {
 		userInfoVo.setDisplayName("jhfsa");
 		userInfoVo.setChannels(channels);
 		return userInfoVo;
+	}
+
+	@Override
+	public void register(String email, String username, String password) throws BusinessException {
+		UserInfo userInfo = this.userInfoMapper.selectByEmail(email);
+		if(userInfo != null){
+			throw new BusinessException("邮箱账号已存在");
+		}
+		userInfo = new UserInfo();
+		userInfo.setUsername(username);
+		userInfo.setEmail(email);
+		userInfo.setPassword(SHA256WithSalt.sha256WithSalt(password,securityProperties.getSalt()));
+		userInfoMapper.insert(userInfo);
 	}
 }

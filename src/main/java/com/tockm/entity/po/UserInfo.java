@@ -13,7 +13,15 @@ public class UserInfo implements Serializable {
 	private String email;
 
 	private String password;
+	private String username;
 
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
 
 	public void setUserId(Integer userId){
 		this.userId = userId;

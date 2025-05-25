@@ -14,7 +14,7 @@ public class BusinessException extends Exception {
 
     public BusinessException(String message) {
         super(message);
-        this.code = ResponseCodeEnum.CODE_200.getCode();
+        this.code = ResponseCodeEnum.CODE_208.getCode();
         this.message = message;
     }
 

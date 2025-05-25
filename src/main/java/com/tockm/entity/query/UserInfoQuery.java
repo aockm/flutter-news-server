@@ -4,7 +4,7 @@ package com.tockm.entity.query;
 
 /**
  *@Description: 查询
- *@date: 2025/05/25
+ *@date: 2025/05/26
  */
 public class UserInfoQuery extends BaseQuery {
 	private Integer userId;
@@ -16,6 +16,10 @@ public class UserInfoQuery extends BaseQuery {
 	private String password;
 
 	private String passwordFuzzy;
+
+	private String username;
+
+	private String usernameFuzzy;
 
 
 	public void setUserId(Integer userId){
@@ -42,6 +46,14 @@ public class UserInfoQuery extends BaseQuery {
 		return this.password;
 	}
 
+	public void setUsername(String username){
+		this.username = username;
+	}
+
+	public String getUsername(){
+		return this.username;
+	}
+
 	public void setEmailFuzzy(String emailFuzzy){
 		this.emailFuzzy = emailFuzzy;
 	}
@@ -56,6 +68,14 @@ public class UserInfoQuery extends BaseQuery {
 
 	public String getPasswordFuzzy(){
 		return this.passwordFuzzy;
+	}
+
+	public void setUsernameFuzzy(String usernameFuzzy){
+		this.usernameFuzzy = usernameFuzzy;
+	}
+
+	public String getUsernameFuzzy(){
+		return this.usernameFuzzy;
 	}
 
 }
