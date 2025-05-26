@@ -33,17 +33,17 @@ public class NewsApplication {
     /**
      * 项目启动输出访问地址
      */
-//    @Bean
-//    public ApplicationRunner applicationRunner(WebServerApplicationContext context,IpAddressUtils ipAddressUtils) {
-//        return (ApplicationArguments args) -> {
-//            try {
-//                Console.log("===============项目启动成功 start===============");
-//                List<String> ipAddressList = ipAddressUtils.getIpAddressOfStartUp(context);
-//                ipAddressList.forEach(Console::log);
-//                Console.log("================项目启动成功 end================");
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//        };
-//    }
+    @Bean
+    public ApplicationRunner applicationRunner(WebServerApplicationContext context,IpAddressUtils ipAddressUtils) {
+        return (ApplicationArguments args) -> {
+            try {
+                Console.log("===============项目启动成功 start===============");
+                List<String> ipAddressList = ipAddressUtils.getIpAddressOfStartUp(context);
+                ipAddressList.forEach(Console::log);
+                Console.log("================项目启动成功 end================");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        };
+    }
 }
