@@ -72,7 +72,7 @@
 
 	<!--插入（匹配有值字段）-->
 	<insert id="insert" parameterType="com.tockm.entity.po.UserInfo">
-		<selectKey keyProperty="bean.user_id" resultType="Integer" order="AFTER">
+		<selectKey keyProperty="bean.userId" resultType="Integer" order="AFTER">
 			SELECT LAST_INSERT_ID()
 		</selectKey>
 		INSERT INTO user_info

@@ -15,6 +15,8 @@ import java.util.Arrays;
 import java.util.List;
 import javax.annotation.Resource;;
 import com.tockm.utils.SHA256WithSalt;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 /**
@@ -23,6 +25,7 @@ import org.springframework.stereotype.Service;
  */
 @Service("userInfoService")
 public class UserInfoServiceImpl implements UserInfoService {
+	private static final Logger log = LoggerFactory.getLogger(UserInfoServiceImpl.class);
 	@Resource
 	private UserInfoMapper<UserInfo,UserInfoQuery> userInfoMapper;
 
