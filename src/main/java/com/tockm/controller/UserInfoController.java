@@ -1,20 +1,20 @@
 package com.tockm.controller;
-import com.tockm.exception.BusinessException;
-import com.tockm.service.UserInfoService;
+
 import com.tockm.entity.po.UserInfo;
 import com.tockm.entity.query.UserInfoQuery;
 import com.tockm.entity.vo.ResponseVo;
-import java.util.List;
-import javax.annotation.Resource;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
-
+import com.tockm.exception.BusinessException;
+import com.tockm.service.UserInfoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import javax.annotation.Resource;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+import java.util.List;
 
 /**
  *@Description: Service

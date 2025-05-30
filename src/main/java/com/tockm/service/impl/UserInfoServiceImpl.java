@@ -12,6 +12,7 @@ import com.tockm.entity.vo.PaginationResultVo;
 
 import java.lang.reflect.Array;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import javax.annotation.Resource;;
 import com.tockm.utils.SHA256WithSalt;
@@ -127,7 +128,7 @@ public class UserInfoServiceImpl implements UserInfoService {
 		List<String> channels = Arrays.asList("dsd","dsd");
 		UserInfoVo userInfoVo = new UserInfoVo();
 		userInfoVo.setAccessToken("2113");
-		userInfoVo.setDisplayName("jhfsa");
+		userInfoVo.setDisplayName(userInfo.getUsername());
 		userInfoVo.setChannels(channels);
 		return userInfoVo;
 	}
@@ -142,6 +143,7 @@ public class UserInfoServiceImpl implements UserInfoService {
 		userInfo.setUsername(username);
 		userInfo.setEmail(email);
 		userInfo.setPassword(SHA256WithSalt.sha256WithSalt(password,securityProperties.getSalt()));
+		userInfo.setCreateTime(new Date());
 		userInfoMapper.insert(userInfo);
 	}
 }

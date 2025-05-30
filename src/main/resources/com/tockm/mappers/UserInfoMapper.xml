@@ -6,16 +6,18 @@
 		<!---->
 		<id column="user_id" property="userId"/>
 		<!---->
+		<result column="username" property="username"/>
+		<!---->
 		<result column="email" property="email"/>
 		<!---->
 		<result column="password" property="password"/>
 		<!---->
-		<result column="username" property="username"/>
+		<result column="create_time" property="createTime"/>
 	</resultMap>
 
 	<!--通用查询结果列-->
 	<sql id="base_column_list" >
-		user_id,email,password,username
+		user_id,username,email,password,create_time
 	</sql>
 
 	<!--基础查询条件-->
@@ -23,27 +25,36 @@
 		<if test="query.userId!=null">
 			and user_id = #{query.userId}
 		</if>
+		<if test="query.username!=null and query.username!='' ">
+			and username = #{query.username}
+		</if>
 		<if test="query.email!=null and query.email!='' ">
 			and email = #{query.email}
 		</if>
 		<if test="query.password!=null and query.password!='' ">
 			and password = #{query.password}
 		</if>
-		<if test="query.username!=null and query.username!='' ">
-			and username = #{query.username}
+		<if test="query.createTime!=null">
+			and create_time = #{query.createTime}
 		</if>
 	</sql>
 
 	<!--扩展查询条件列-->
 	<sql id="query_condition_extend" >
-		<if test="query.emailFuzzy!=null and query.emailFuzzy!='' ">
-			 and email like concat ('%',#{query.emailFuzzy}, '%')
-		</if>
-		<if test="query.passwordFuzzy!=null and query.passwordFuzzy!='' ">
-			 and password like concat ('%',#{query.passwordFuzzy}, '%')
-		</if>
 		<if test="query.usernameFuzzy!=null and query.usernameFuzzy!='' ">
 			and username like concat ('%',#{query.usernameFuzzy}, '%')
+		</if>
+		<if test="query.emailFuzzy!=null and query.emailFuzzy!='' ">
+			and email like concat ('%',#{query.emailFuzzy}, '%')
+		</if>
+		<if test="query.passwordFuzzy!=null and query.passwordFuzzy!='' ">
+			and password like concat ('%',#{query.passwordFuzzy}, '%')
+		</if>
+		<if test="query.createTimeStart!=null and query.createTimeStart!='' ">
+			<![CDATA[ and create_time >= str_to_date(#{query.createTimeStart}, '%Y-%m-%d')]]>
+		</if>
+		<if test="query.createTimeEnd!=null and query.createTimeEnd!='' ">
+			<![CDATA[ and null < date_sub(str_to_date(#{query.createTimeEnd},' %Y-%m-%d'), interval - 1 day)]]>
 		</if>
 	</sql>
 
@@ -80,19 +91,25 @@
 			<if test="bean.userId!=null">
 				user_id,
 			</if>
+			<if test="bean.username!=null">
+				username,
+			</if>
 			<if test="bean.email!=null">
 				email,
 			</if>
 			<if test="bean.password!=null">
 				password,
 			</if>
-			<if test="bean.username!=null">
-				username,
+			<if test="bean.createTime!=null">
+				create_time,
 			</if>
 		</trim>
 		<trim prefix="values (" suffix=")" suffixOverrides=",">
 			<if test="bean.userId!=null">
 				#{bean.userId},
+			</if>
+			<if test="bean.username!=null">
+				#{bean.username},
 			</if>
 			<if test="bean.email!=null">
 				#{bean.email},
@@ -100,8 +117,8 @@
 			<if test="bean.password!=null">
 				#{bean.password},
 			</if>
-			<if test="bean.username!=null">
-				#{bean.username},
+			<if test="bean.createTime!=null">
+				#{bean.createTime},
 			</if>
 		</trim>
 	</insert>
@@ -113,16 +130,25 @@
 			<if test="bean.userId!=null">
 				user_id,
 			</if>
+			<if test="bean.username!=null">
+				username,
+			</if>
 			<if test="bean.email!=null">
 				email,
 			</if>
 			<if test="bean.password!=null">
 				password,
 			</if>
+			<if test="bean.createTime!=null">
+				create_time,
+			</if>
 		</trim>
 		<trim prefix="values (" suffix=")" suffixOverrides=",">
 			<if test="bean.userId!=null">
 				#{bean.userId},
+			</if>
+			<if test="bean.username!=null">
+				#{bean.username},
 			</if>
 			<if test="bean.email!=null">
 				#{bean.email},
@@ -130,8 +156,8 @@
 			<if test="bean.password!=null">
 				#{bean.password},
 			</if>
-			<if test="bean.username!=null">
-				username,
+			<if test="bean.createTime!=null">
+				#{bean.createTime},
 			</if>
 		</trim>
 		on DUPLICATE key update
@@ -139,38 +165,42 @@
 			<if test="bean.userId!=null">
 				user_id = VALUES(user_id),
 			</if>
+			<if test="bean.username!=null">
+				username = VALUES(username),
+			</if>
 			<if test="bean.email!=null">
 				email = VALUES(email),
 			</if>
 			<if test="bean.password!=null">
 				password = VALUES(password),
 			</if>
-			<if test="bean.username!=null">
-				#{bean.username},
+			<if test="bean.createTime!=null">
+				create_time = VALUES(create_time),
 			</if>
 		</trim>
 	</insert>
 
 	<!--添加（批量插入）-->
 	<insert id="insertBatch" parameterType="com.tockm.entity.po.UserInfo">
-		INSERT INTO user_info(email,password,username)values
+		INSERT INTO user_info(username,email,password,create_time)values
 		<foreach collection="list" item="item" separator=",">
-		(
-			#{item.email},#{item.password},#{item.username}
-		)
+			(
+			#{item.username},#{item.email},#{item.password},#{item.createTime}
+			)
 		</foreach>
 	</insert>
 
 	<!-- 批量添加 修改（批量插入）-->
 	<insert id="insertOrUpdateBatch" parameterType="com.tockm.entity.po.UserInfo">
-		INSERT INTO user_info(email,password,username)values
+		INSERT INTO user_info(username,email,password,create_time)values
 		<foreach collection="list" item="item" separator=",">
-			(#{item.email},#{item.password}),#{item.username})
+			(#{item.username},#{item.email},#{item.password},#{item.createTime})
 		</foreach>
 		on DUPLICATE key update
+		username = VALUES(username),
 		email = VALUES(email),
 		password = VALUES(password),
-		username = VALUES(username)
+		create_time = VALUES(create_time)
 	</insert>
 
 	<!-- 根据主键修改 -->
@@ -185,14 +215,17 @@
 	<update id="updateByParam" parameterType="com.tockm.entity.po.UserInfo">
 		update user_info
 		<set>
+			<if test="bean.username!=null">
+				username = #{bean.username},
+			</if>
 			<if test="bean.email!=null">
 				email = #{bean.email},
 			</if>
 			<if test="bean.password!=null">
 				password = #{bean.password},
 			</if>
-			<if test="bean.username!=null">
-				username = #{bean.username},
+			<if test="bean.createTime!=null">
+				create_time = #{bean.createTime},
 			</if>
 		</set>
 		where <include refid="base_query_condition"/>
@@ -204,6 +237,7 @@
 		where user_id=#{userId}
 	</delete>
 
+	<!--新增-->
 	<select id="selectByEmail" resultMap="base_result_map">
 		select <include refid="base_column_list"/>
 		from user_info

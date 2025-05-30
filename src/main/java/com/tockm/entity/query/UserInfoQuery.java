@@ -1,6 +1,7 @@
 package com.tockm.entity.query;
 
 
+import java.util.Date;
 
 /**
  *@Description: 查询
@@ -20,7 +21,35 @@ public class UserInfoQuery extends BaseQuery {
 	private String username;
 
 	private String usernameFuzzy;
+	private Date createTime;
 
+	private String createTimeStart;
+
+	private String createTimeEnd;
+
+	public Date getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
+
+	public String getCreateTimeStart() {
+		return createTimeStart;
+	}
+
+	public void setCreateTimeStart(String createTimeStart) {
+		this.createTimeStart = createTimeStart;
+	}
+
+	public String getCreateTimeEnd() {
+		return createTimeEnd;
+	}
+
+	public void setCreateTimeEnd(String createTimeEnd) {
+		this.createTimeEnd = createTimeEnd;
+	}
 
 	public void setUserId(Integer userId){
 		this.userId = userId;

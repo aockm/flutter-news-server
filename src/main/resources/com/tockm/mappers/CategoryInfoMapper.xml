@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tockm.mappers.CategoryInfoMapper">
+	<!--实体类映射-->
+	<resultMap id="base_result_map" type="com.tockm.entity.po.CategoryInfo">
+		<!---->
+		<id column="id" property="id"/>
+		<!---->
+		<result column="code" property="code"/>
+		<!---->
+		<result column="title" property="title"/>
+	</resultMap>
+
+	<!--通用查询结果列-->
+	<sql id="base_column_list" >
+		id,code,title
+	</sql>
+
+	<!--基础查询条件-->
+	<sql id="base_query_condition" >
+		<if test="query.id!=null">
+			and id = #{query.id}
+		</if>
+		<if test="query.code!=null">
+			and code = #{query.code}
+		</if>
+		<if test="query.title!=null and query.title!='' ">
+			and title = #{query.title}
+		</if>
+	</sql>
+
+	<!--扩展查询条件列-->
+	<sql id="query_condition_extend" >
+		<if test="query.titleFuzzy!=null and query.titleFuzzy!='' ">
+			 and title like concat ('%',#{query.titleFuzzy}, '%')
+		</if>
+	</sql>
+
+	<!--扩展的查询条件-->
+	<sql id="query_condition" >
+		<where>
+			<include refid="base_query_condition" />
+			<include refid="query_condition_extend" />
+		</where>
+
+	</sql>
+
+	<!--查询集合-->
+	<select id="selectList" resultMap="base_result_map">
+		SELECT <include refid="base_column_list"/> FROM category_info
+		<include refid="query_condition"/>
+		<if test="query.orderBy!=null">order by ${query.orderBy}</if>
+		<if test="query.simplePage!=null">limit #{query.simplePage.startIndex}, #{query.simplePage.endIndex}</if>
+	</select>
+
+	<!--查询集合-->
+	<select id="selectCount" resultType="java.lang.Integer">
+		SELECT count(1) FROM category_info
+		<include refid="query_condition"/>
+	</select>
+
+	<!--插入（匹配有值字段）-->
+	<insert id="insert" parameterType="com.tockm.entity.po.CategoryInfo">
+		<selectKey keyProperty="bean.id" resultType="Integer" order="AFTER">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		INSERT INTO category_info
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="bean.id!=null">
+				id,
+			</if>
+			<if test="bean.code!=null">
+				code,
+			</if>
+			<if test="bean.title!=null">
+				title,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="bean.id!=null">
+				#{bean.id},
+			</if>
+			<if test="bean.code!=null">
+				#{bean.code},
+			</if>
+			<if test="bean.title!=null">
+				#{bean.title},
+			</if>
+		</trim>
+	</insert>
+
+	<!--插入或更新（匹配有值字段）-->
+	<insert id="insertOrUpdate" parameterType="com.tockm.entity.po.CategoryInfo">
+		INSERT INTO category_info
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="bean.id!=null">
+				id,
+			</if>
+			<if test="bean.code!=null">
+				code,
+			</if>
+			<if test="bean.title!=null">
+				title,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="bean.id!=null">
+				#{bean.id},
+			</if>
+			<if test="bean.code!=null">
+				#{bean.code},
+			</if>
+			<if test="bean.title!=null">
+				#{bean.title},
+			</if>
+		</trim>
+		on DUPLICATE key update
+		<trim prefix="" suffix="" suffixOverrides=",">
+			<if test="bean.id!=null">
+				id = VALUES(id),
+			</if>
+			<if test="bean.code!=null">
+				code = VALUES(code),
+			</if>
+			<if test="bean.title!=null">
+				title = VALUES(title),
+			</if>
+		</trim>
+	</insert>
+
+	<!--添加（批量插入）-->
+	<insert id="insertBatch" parameterType="com.tockm.entity.po.CategoryInfo">
+		INSERT INTO category_info(code,title)values
+		<foreach collection="list" item="item" separator=",">
+		(
+			#{item.code},#{item.title}
+		)
+		</foreach>
+	</insert>
+
+	<!-- 批量添加 修改（批量插入）-->
+	<insert id="insertOrUpdateBatch" parameterType="com.tockm.entity.po.CategoryInfo">
+		INSERT INTO category_info(code,title)values
+		<foreach collection="list" item="item" separator=",">
+			(#{item.code},#{item.title})
+		</foreach>
+		on DUPLICATE key update
+		code = VALUES(code),
+		title = VALUES(title)
+	</insert>
+
+	<!-- 根据主键修改 -->
+	<!-- 根据Id查询 -->
+	<select id="selectById" resultMap="base_result_map">
+		select <include refid="base_column_list"/>
+		from category_info
+		where id=#{id}
+	</select>
+
+	<!-- 根据Id更新 -->
+	<update id="updateByParam" parameterType="com.tockm.entity.po.CategoryInfo">
+		update category_info
+		<set>
+			<if test="bean.code!=null">
+				code = #{bean.code},
+			</if>
+			<if test="bean.title!=null">
+				title = #{bean.title},
+			</if>
+		</set>
+		where <include refid="base_query_condition"/>
+	</update>
+
+	<!-- 根据Id删除 -->
+	<delete id="deleteById">
+		delete from category_info
+		where id=#{id}
+	</delete>
+
+</mapper>
+
