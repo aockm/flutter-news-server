@@ -1,13 +1,14 @@
 package com.tockm.controller;
 
-import cn.hutool.core.date.DateTime;
 import com.tockm.entity.po.*;
 import com.tockm.entity.query.CategoryInfoQuery;
+import com.tockm.entity.query.NewsInfoQuery;
 import com.tockm.entity.query.SimplePage;
 import com.tockm.entity.vo.PaginationResultVo;
 import com.tockm.entity.vo.ResponseVo;
 import com.tockm.enums.PageSize;
 import com.tockm.service.CategoryInfoService;
+import com.tockm.service.NewsInfoService;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,21 +23,23 @@ public class HomeController extends ABaseController {
     @Resource
     private CategoryInfoService categoryInfoService;
 
+    @Resource
+    private NewsInfoService newsInfoService;
+
     @RequestMapping("/categories")
     public ResponseVo getCategories(CategoryInfoQuery query){
-        CategoryEntity categoryEntity1 = new CategoryEntity();
-        categoryEntity1.setCode("101");
-        categoryEntity1.setTitle("分类1");
-        CategoryEntity categoryEntity2 = new CategoryEntity();
-        categoryEntity2.setCode("102");
-        categoryEntity2.setTitle("分类2");
-        CategoryEntity categoryEntity3 = new CategoryEntity();
-        categoryEntity3.setCode("103");
-        categoryEntity3.setTitle("分类3");
-        List<CategoryEntity> categoryEntities = new ArrayList<CategoryEntity>();
+        CategoryEntity categoryEntity1 = new CategoryEntity("Latest","Latest");
+        CategoryEntity categoryEntity2 = new CategoryEntity("Word","Word");
+        CategoryEntity categoryEntity3 = new CategoryEntity("Business","Business");
+
+        List<CategoryEntity> categoryEntities = new ArrayList();
+        categoryEntities.add(new CategoryEntity("国内","国内"));
         categoryEntities.add(categoryEntity1);
         categoryEntities.add(categoryEntity2);
         categoryEntities.add(categoryEntity3);
+        categoryEntities.add(new CategoryEntity("Sport","Sport"));
+        categoryEntities.add(new CategoryEntity("Life","Life"));
+
 
         int pageSize = query.getPageSize()==null? PageSize.SIZE15.getSize():query.getPageSize();
         SimplePage page = new SimplePage(query.getPageNo(), 3, pageSize);
@@ -45,42 +48,38 @@ public class HomeController extends ABaseController {
     }
 
     @RequestMapping("/news")
-    public ResponseVo loadDataList(){
-        NewsInfo newsInfo = new NewsInfo("101","102","103","略图","央视",new DateTime(),"http://slide.news.sina.com.cn/slide_1_2841_608689.html");
-        NewsInfo newsInfo2 = new NewsInfo("101","102","103","略图","央视",new DateTime(),"http://slide.news.sina.com.cn/slide_1_2841_608689.html");
-        NewsInfo newsInfo3 = new NewsInfo("101","102","103","略图","央视",new DateTime(),"http://slide.news.sina.com.cn/slide_1_2841_608689.html");
-        List<NewsInfo> newsInfos = new ArrayList<>();
-        newsInfos.add(newsInfo);
-        newsInfos.add(newsInfo2);
-        newsInfos.add(newsInfo3);
-        PaginationResultVo<UserInfo> result = new PaginationResultVo(3,15,1,1,newsInfos);
+    public ResponseVo loadDataList(NewsInfoQuery query){
+//        NewsInfo newsInfo = new NewsInfo("101","102","Life","https://p2.img.cctvpic.com/photoworkspace/contentimg/2025/05/30/2025053015425334310.png","央视",new DateTime("2025-05-30 10:10:10"),"https://k.sinaimg.cn/n/front20250530ac/400/w720h480/20250530/fda6-69b77430f51cae2686f8cc324aa96ed0.jpg/w700d1q75cms.jpg?by=cms_fixed_width");
+//        NewsInfo newsInfo2 = new NewsInfo("101","102","Sport","https://p2.img.cctvpic.com/photoworkspace/contentimg/2025/05/30/2025053015425334310.png","央视",new DateTime("2025-03-30 10:10:10"),"https://k.sinaimg.cn/n/front20250530ac/400/w720h480/20250530/fda6-69b77430f51cae2686f8cc324aa96ed0.jpg/w700d1q75cms.jpg?by=cms_fixed_width");
+//        NewsInfo newsInfo3 = new NewsInfo("101","日本水产品请求入华，中方回应","Latest","https://p2.img.cctvpic.com/photoworkspace/contentimg/2025/05/30/2025053015425334310.png","937江苏新闻广播",new DateTime("2025-05-20 10:10:10"),"https://k.sinaimg.cn/n/front20250530ac/400/w720h480/20250530/fda6-69b77430f51cae2686f8cc324aa96ed0.jpg/w700d1q75cms.jpg?by=cms_fixed_width");
+//        List<NewsInfo> newsInfos = new ArrayList<>();
+//        newsInfos.add(newsInfo);
+//        newsInfos.add(newsInfo2);
+//        newsInfos.add(newsInfo3);
+//        PaginationResultVo<UserInfo> result = new PaginationResultVo(3,15,1,1,newsInfos);
 
-        return getSuccessResponseVo(result);
+        return getSuccessResponseVo(newsInfoService.findListByPage(query));
     }
 
     @RequestMapping("/recommend")
-    public ResponseVo getRecommend(){
-        NewsInfo newsInfo = new NewsInfo("101","102","103","略图","央视",new DateTime(),"http://slide.news.sina.com.cn/slide_1_2841_608689.html");
-
-        return getSuccessResponseVo(newsInfo);
+    public ResponseVo getRecommend(String category){
+       //        NewsInfo newsInfo = new NewsInfo("101","日本水产品请求入华，中方回应","Latest","https://p2.img.cctvpic.com/photoworkspace/contentimg/2025/05/30/2025053015425334310.png","937江苏新闻广播",new DateTime("2025-05-30 10:10:10"),"https://p2.img.cctvpic.com/photoworkspace/contentimg/2025/05/30/2025053015425334310.pngl");
+//        query.setCategory("Latest");
+//        query.setRecommend(1);
+        return getSuccessResponseVo(newsInfoService.getNewsInfoRecommend(category));
     }
 
 
     @RequestMapping("/channels")
     public ResponseVo getChannels(){
-        ChannelEntity channelEntity = new ChannelEntity();
-        channelEntity.setCode("101");
-        channelEntity.setTitle("新闻");
-        ChannelEntity channelEntity2 = new ChannelEntity();
-        channelEntity2.setCode("102");
-        channelEntity2.setTitle("简讯");
-        ChannelEntity channelEntity3 = new ChannelEntity();
-        channelEntity3.setCode("103");
-        channelEntity3.setTitle("热点");
+
         List<ChannelEntity> channelEntities = new ArrayList<>();
-        channelEntities.add(channelEntity);
-        channelEntities.add(channelEntity2);
-        channelEntities.add(channelEntity3);
+        channelEntities.add(new ChannelEntity("rt","rt"));
+        channelEntities.add(new ChannelEntity("bbc","bbc"));
+        channelEntities.add(new ChannelEntity("nbc","nbc"));
+        channelEntities.add(new ChannelEntity("bloomberg","bloomberg"));
+        channelEntities.add(new ChannelEntity("cnn","cnn"));
+        channelEntities.add(new ChannelEntity("fox","fox"));
         PaginationResultVo<UserInfo> result = new PaginationResultVo(3,15,1,1,channelEntities);
         return getSuccessResponseVo(result);
     }

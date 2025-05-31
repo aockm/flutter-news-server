@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tockm.mappers.NewsInfoMapper">
+	<!--实体类映射-->
+	<resultMap id="base_result_map" type="com.tockm.entity.po.NewsInfo">
+		<!---->
+		<id column="id" property="id"/>
+		<!---->
+		<result column="title" property="title"/>
+		<!---->
+		<result column="category" property="category"/>
+		<!---->
+		<result column="recommend" property="recommend"/>
+		<!---->
+		<result column="thumbnail" property="thumbnail"/>
+		<!---->
+		<result column="author" property="author"/>
+		<!---->
+		<result column="addTime" property="addTime"/>
+		<!---->
+		<result column="url" property="url"/>
+	</resultMap>
+
+	<!--通用查询结果列-->
+	<sql id="base_column_list" >
+		id,title,category,recommend,thumbnail,author,addTime,url
+	</sql>
+
+	<!--基础查询条件-->
+	<sql id="base_query_condition" >
+		<if test="query.id!=null and query.id!='' ">
+			and id = #{query.id}
+		</if>
+		<if test="query.title!=null and query.title!='' ">
+			and title = #{query.title}
+		</if>
+		<if test="query.category!=null and query.category!='' ">
+			and category = #{query.category}
+		</if>
+		<if test="query.recommend!=null">
+			and recommend = #{query.recommend}
+		</if>
+		<if test="query.thumbnail!=null and query.thumbnail!='' ">
+			and thumbnail = #{query.thumbnail}
+		</if>
+		<if test="query.author!=null and query.author!='' ">
+			and author = #{query.author}
+		</if>
+		<if test="query.addTime!=null">
+			and addTime = #{query.addTime}
+		</if>
+		<if test="query.url!=null and query.url!='' ">
+			and url = #{query.url}
+		</if>
+	</sql>
+
+	<!--扩展查询条件列-->
+	<sql id="query_condition_extend" >
+		<if test="query.idFuzzy!=null and query.idFuzzy!='' ">
+			 and id like concat ('%',#{query.idFuzzy}, '%')
+		</if>
+		<if test="query.titleFuzzy!=null and query.titleFuzzy!='' ">
+			 and title like concat ('%',#{query.titleFuzzy}, '%')
+		</if>
+		<if test="query.categoryFuzzy!=null and query.categoryFuzzy!='' ">
+			 and category like concat ('%',#{query.categoryFuzzy}, '%')
+		</if>
+		<if test="query.thumbnailFuzzy!=null and query.thumbnailFuzzy!='' ">
+			 and thumbnail like concat ('%',#{query.thumbnailFuzzy}, '%')
+		</if>
+		<if test="query.authorFuzzy!=null and query.authorFuzzy!='' ">
+			 and author like concat ('%',#{query.authorFuzzy}, '%')
+		</if>
+		<if test="query.urlFuzzy!=null and query.urlFuzzy!='' ">
+			 and url like concat ('%',#{query.urlFuzzy}, '%')
+		</if>
+	</sql>
+
+	<!--扩展的查询条件-->
+	<sql id="query_condition" >
+		<where>
+			<include refid="base_query_condition" />
+			<include refid="query_condition_extend" />
+		</where>
+
+	</sql>
+
+	<!--查询集合-->
+	<select id="selectList" resultMap="base_result_map">
+		SELECT <include refid="base_column_list"/> FROM news_info
+		<include refid="query_condition"/>
+		<if test="query.orderBy!=null">order by ${query.orderBy}</if>
+		<if test="query.simplePage!=null">limit #{query.simplePage.startIndex}, #{query.simplePage.endIndex}</if>
+	</select>
+
+	<!--查询集合-->
+	<select id="selectCount" resultType="java.lang.Integer">
+		SELECT count(1) FROM news_info
+		<include refid="query_condition"/>
+	</select>
+
+	<!--插入（匹配有值字段）-->
+	<insert id="insert" parameterType="com.tockm.entity.po.NewsInfo">
+		INSERT INTO news_info
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="bean.id!=null">
+				id,
+			</if>
+			<if test="bean.title!=null">
+				title,
+			</if>
+			<if test="bean.category!=null">
+				category,
+			</if>
+			<if test="bean.recommend!=null">
+				recommend,
+			</if>
+			<if test="bean.thumbnail!=null">
+				thumbnail,
+			</if>
+			<if test="bean.author!=null">
+				author,
+			</if>
+			<if test="bean.addTime!=null">
+				addTime,
+			</if>
+			<if test="bean.url!=null">
+				url,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="bean.id!=null">
+				#{bean.id},
+			</if>
+			<if test="bean.title!=null">
+				#{bean.title},
+			</if>
+			<if test="bean.category!=null">
+				#{bean.category},
+			</if>
+			<if test="bean.recommend!=null">
+				#{bean.recommend},
+			</if>
+			<if test="bean.thumbnail!=null">
+				#{bean.thumbnail},
+			</if>
+			<if test="bean.author!=null">
+				#{bean.author},
+			</if>
+			<if test="bean.addTime!=null">
+				#{bean.addTime},
+			</if>
+			<if test="bean.url!=null">
+				#{bean.url},
+			</if>
+		</trim>
+	</insert>
+
+	<!--插入或更新（匹配有值字段）-->
+	<insert id="insertOrUpdate" parameterType="com.tockm.entity.po.NewsInfo">
+		INSERT INTO news_info
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="bean.id!=null">
+				id,
+			</if>
+			<if test="bean.title!=null">
+				title,
+			</if>
+			<if test="bean.category!=null">
+				category,
+			</if>
+			<if test="bean.recommend!=null">
+				recommend,
+			</if>
+			<if test="bean.thumbnail!=null">
+				thumbnail,
+			</if>
+			<if test="bean.author!=null">
+				author,
+			</if>
+			<if test="bean.addTime!=null">
+				addTime,
+			</if>
+			<if test="bean.url!=null">
+				url,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="bean.id!=null">
+				#{bean.id},
+			</if>
+			<if test="bean.title!=null">
+				#{bean.title},
+			</if>
+			<if test="bean.category!=null">
+				#{bean.category},
+			</if>
+			<if test="bean.recommend!=null">
+				#{bean.recommend},
+			</if>
+			<if test="bean.thumbnail!=null">
+				#{bean.thumbnail},
+			</if>
+			<if test="bean.author!=null">
+				#{bean.author},
+			</if>
+			<if test="bean.addTime!=null">
+				#{bean.addTime},
+			</if>
+			<if test="bean.url!=null">
+				#{bean.url},
+			</if>
+		</trim>
+		on DUPLICATE key update
+		<trim prefix="" suffix="" suffixOverrides=",">
+			<if test="bean.id!=null">
+				id = VALUES(id),
+			</if>
+			<if test="bean.title!=null">
+				title = VALUES(title),
+			</if>
+			<if test="bean.category!=null">
+				category = VALUES(category),
+			</if>
+			<if test="bean.recommend!=null">
+				recommend = VALUES(recommend),
+			</if>
+			<if test="bean.thumbnail!=null">
+				thumbnail = VALUES(thumbnail),
+			</if>
+			<if test="bean.author!=null">
+				author = VALUES(author),
+			</if>
+			<if test="bean.addTime!=null">
+				addTime = VALUES(addTime),
+			</if>
+			<if test="bean.url!=null">
+				url = VALUES(url),
+			</if>
+		</trim>
+	</insert>
+
+	<!--添加（批量插入）-->
+	<insert id="insertBatch" parameterType="com.tockm.entity.po.NewsInfo">
+		INSERT INTO news_info(id,title,category,recommend,thumbnail,author,addTime,url)values
+		<foreach collection="list" item="item" separator=",">
+		(
+			#{item.id},#{item.title},#{item.category},#{item.recommend},#{item.thumbnail},#{item.author},#{item.addTime},#{item.url}
+		)
+		</foreach>
+	</insert>
+
+	<!-- 批量添加 修改（批量插入）-->
+	<insert id="insertOrUpdateBatch" parameterType="com.tockm.entity.po.NewsInfo">
+		INSERT INTO news_info(id,title,category,recommend,thumbnail,author,addTime,url)values
+		<foreach collection="list" item="item" separator=",">
+			(#{item.id},#{item.title},#{item.category},#{item.recommend},#{item.thumbnail},#{item.author},#{item.addTime},#{item.url})
+		</foreach>
+		on DUPLICATE key update
+		id = VALUES(id),
+		title = VALUES(title),
+		category = VALUES(category),
+		recommend = VALUES(recommend),
+		thumbnail = VALUES(thumbnail),
+		author = VALUES(author),
+		addTime = VALUES(addTime)
+	</insert>
+
+	<!-- 根据主键修改 -->
+	<!-- 根据Id查询 -->
+	<select id="selectById" resultMap="base_result_map">
+		select <include refid="base_column_list"/>
+		from news_info
+		where id=#{id}
+	</select>
+
+	<!-- 根据category查询推荐 -->
+	<select id="selectRecommend" resultMap="base_result_map">
+		select <include refid="base_column_list"/>
+		from news_info
+		where category=#{category}
+	    and recommend=#{recommend}
+	</select>
+
+	<!-- 根据Id更新 -->
+	<update id="updateByParam" parameterType="com.tockm.entity.po.NewsInfo">
+		update news_info
+		<set>
+			<if test="bean.id!=null">
+				id = #{bean.id},
+			</if>
+			<if test="bean.title!=null">
+				title = #{bean.title},
+			</if>
+			<if test="bean.category!=null">
+				category = #{bean.category},
+			</if>
+			<if test="bean.recommend!=null">
+				recommend = #{bean.recommend},
+			</if>
+			<if test="bean.thumbnail!=null">
+				thumbnail = #{bean.thumbnail},
+			</if>
+			<if test="bean.author!=null">
+				author = #{bean.author},
+			</if>
+			<if test="bean.addTime!=null">
+				addTime = #{bean.addTime},
+			</if>
+			<if test="bean.url!=null">
+				url = #{bean.url},
+			</if>
+		</set>
+		where <include refid="base_query_condition"/>
+	</update>
+
+	<!-- 根据Id删除 -->
+	<delete id="deleteById">
+		delete from news_info
+		where id=#{id}
+	</delete>
+
+</mapper>
+

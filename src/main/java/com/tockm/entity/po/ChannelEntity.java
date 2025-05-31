@@ -8,6 +8,14 @@ public class ChannelEntity implements Serializable {
 
     private String title;
 
+    public ChannelEntity() {
+    }
+
+    public ChannelEntity(String code, String title) {
+        this.code = code;
+        this.title = title;
+    }
+
     public String getCode() {
         return code;
     }

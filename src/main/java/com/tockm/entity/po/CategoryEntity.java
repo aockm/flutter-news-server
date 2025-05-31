@@ -6,6 +6,14 @@ public class CategoryEntity implements Serializable {
     private String code;
     private String title;
 
+    public CategoryEntity() {
+    }
+
+    public CategoryEntity(String code, String title) {
+        this.code = code;
+        this.title = title;
+    }
+
     public String getCode() {
         return code;
     }

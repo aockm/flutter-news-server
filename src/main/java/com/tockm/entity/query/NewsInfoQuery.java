@@ -1,36 +1,44 @@
-package com.tockm.entity.po;
+package com.tockm.entity.query;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.tockm.enums.DateTimePatternEnum;
-import com.tockm.utils.DateUtils;
-import org.springframework.format.annotation.DateTimeFormat;
-
-import java.io.Serializable;
 import java.util.Date;
 
 
 /**
- *@Description: 
+ *@Description: 查询
  *@date: 2025/05/31
  */
-public class NewsInfo implements Serializable {
+public class NewsInfoQuery extends BaseQuery {
 	private String id;
+
+	private String idFuzzy;
 
 	private String title;
 
+	private String titleFuzzy;
+
 	private String category;
+
+	private String categoryFuzzy;
 
 	private Integer recommend;
 
 	private String thumbnail;
 
+	private String thumbnailFuzzy;
+
 	private String author;
 
-	@JsonFormat (pattern = "yyyy-MM-dd HH:mm:ss", timezone="GMT+8")
-	@DateTimeFormat (pattern = "yyyy-MM-dd HH:mm:ss")
+	private String authorFuzzy;
+
 	private Date addTime;
 
+	private String addTimeStart;
+
+	private String addTimeEnd;
+
 	private String url;
+
+	private String urlFuzzy;
 
 
 	public void setId(String id){
@@ -97,8 +105,52 @@ public class NewsInfo implements Serializable {
 		return this.url;
 	}
 
-	@Override
-	public String toString() {
-		return "id:"+(id== null?"空" : id)+",title:"+(title== null?"空" : title)+",category:"+(category== null?"空" : category)+",recommend:"+(recommend== null?"空" : recommend)+",thumbnail:"+(thumbnail== null?"空" : thumbnail)+",author:"+(author== null?"空" : author)+",addTime:"+(addTime== null?"空" : DateUtils.format(addTime, DateTimePatternEnum.YYYY_MM_DD_HH_MM_SS.getPattern()))+",url:"+(url== null?"空" : url);
+	public void setIdFuzzy(String idFuzzy){
+		this.idFuzzy = idFuzzy;
 	}
+
+	public String getIdFuzzy(){
+		return this.idFuzzy;
+	}
+
+	public void setTitleFuzzy(String titleFuzzy){
+		this.titleFuzzy = titleFuzzy;
+	}
+
+	public String getTitleFuzzy(){
+		return this.titleFuzzy;
+	}
+
+	public void setCategoryFuzzy(String categoryFuzzy){
+		this.categoryFuzzy = categoryFuzzy;
+	}
+
+	public String getCategoryFuzzy(){
+		return this.categoryFuzzy;
+	}
+
+	public void setThumbnailFuzzy(String thumbnailFuzzy){
+		this.thumbnailFuzzy = thumbnailFuzzy;
+	}
+
+	public String getThumbnailFuzzy(){
+		return this.thumbnailFuzzy;
+	}
+
+	public void setAuthorFuzzy(String authorFuzzy){
+		this.authorFuzzy = authorFuzzy;
+	}
+
+	public String getAuthorFuzzy(){
+		return this.authorFuzzy;
+	}
+
+	public void setUrlFuzzy(String urlFuzzy){
+		this.urlFuzzy = urlFuzzy;
+	}
+
+	public String getUrlFuzzy(){
+		return this.urlFuzzy;
+	}
+
 }
