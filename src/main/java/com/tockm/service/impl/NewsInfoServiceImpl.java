@@ -94,7 +94,7 @@ public class NewsInfoServiceImpl implements NewsInfoService {
 	@Override
 	public NewsInfo getNewsInfoRecommend(String category) {
 		if (category == null || category.isEmpty()) {
-			category = "Health";
+			category = "Latest";
 		}
 		return this.newsInfoMapper.selectRecommend(category,1);
 	}

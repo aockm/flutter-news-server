@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tockm.mappers.ChannelInfoMapper">
+	<!--实体类映射-->
+	<resultMap id="base_result_map" type="com.tockm.entity.po.ChannelInfo">
+		<!---->
+		<id column="id" property="id"/>
+		<!---->
+		<result column="code" property="code"/>
+		<!---->
+		<result column="channel" property="channel"/>
+	</resultMap>
+
+	<!--通用查询结果列-->
+	<sql id="base_column_list" >
+		code,channel
+	</sql>
+
+	<!--基础查询条件-->
+	<sql id="base_query_condition" >
+		<if test="query.id!=null">
+			and id = #{query.id}
+		</if>
+		<if test="query.code!=null and query.code!='' ">
+			and code = #{query.code}
+		</if>
+		<if test="query.channel!=null and query.channel!='' ">
+			and channel = #{query.channel}
+		</if>
+	</sql>
+
+	<!--扩展查询条件列-->
+	<sql id="query_condition_extend" >
+		<if test="query.codeFuzzy!=null and query.codeFuzzy!='' ">
+			 and code like concat ('%',#{query.codeFuzzy}, '%')
+		</if>
+		<if test="query.channelFuzzy!=null and query.channelFuzzy!='' ">
+			 and channel like concat ('%',#{query.channelFuzzy}, '%')
+		</if>
+	</sql>
+
+	<!--扩展的查询条件-->
+	<sql id="query_condition" >
+		<where>
+			<include refid="base_query_condition" />
+			<include refid="query_condition_extend" />
+		</where>
+
+	</sql>
+
+	<!--查询集合-->
+	<select id="selectList" resultMap="base_result_map">
+		SELECT <include refid="base_column_list"/> FROM channel_info
+		<include refid="query_condition"/>
+		<if test="query.orderBy!=null">order by ${query.orderBy}</if>
+		<if test="query.simplePage!=null">limit #{query.simplePage.startIndex}, #{query.simplePage.endIndex}</if>
+	</select>
+
+	<!--查询集合-->
+	<select id="selectCount" resultType="java.lang.Integer">
+		SELECT count(1) FROM channel_info
+		<include refid="query_condition"/>
+	</select>
+
+	<!--插入（匹配有值字段）-->
+	<insert id="insert" parameterType="com.tockm.entity.po.ChannelInfo">
+		<selectKey keyProperty="bean.id" resultType="Integer" order="AFTER">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		INSERT INTO channel_info
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="bean.id!=null">
+				id,
+			</if>
+			<if test="bean.code!=null">
+				code,
+			</if>
+			<if test="bean.channel!=null">
+				channel,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="bean.id!=null">
+				#{bean.id},
+			</if>
+			<if test="bean.code!=null">
+				#{bean.code},
+			</if>
+			<if test="bean.channel!=null">
+				#{bean.channel},
+			</if>
+		</trim>
+	</insert>
+
+	<!--插入或更新（匹配有值字段）-->
+	<insert id="insertOrUpdate" parameterType="com.tockm.entity.po.ChannelInfo">
+		INSERT INTO channel_info
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="bean.id!=null">
+				id,
+			</if>
+			<if test="bean.code!=null">
+				code,
+			</if>
+			<if test="bean.channel!=null">
+				channel,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="bean.id!=null">
+				#{bean.id},
+			</if>
+			<if test="bean.code!=null">
+				#{bean.code},
+			</if>
+			<if test="bean.channel!=null">
+				#{bean.channel},
+			</if>
+		</trim>
+		on DUPLICATE key update
+		<trim prefix="" suffix="" suffixOverrides=",">
+			<if test="bean.id!=null">
+				id = VALUES(id),
+			</if>
+			<if test="bean.code!=null">
+				code = VALUES(code),
+			</if>
+			<if test="bean.channel!=null">
+				channel = VALUES(channel),
+			</if>
+		</trim>
+	</insert>
+
+	<!--添加（批量插入）-->
+	<insert id="insertBatch" parameterType="com.tockm.entity.po.ChannelInfo">
+		INSERT INTO channel_info(code,channel)values
+		<foreach collection="list" item="item" separator=",">
+		(
+			#{item.code},#{item.channel}
+		)
+		</foreach>
+	</insert>
+
+	<!-- 批量添加 修改（批量插入）-->
+	<insert id="insertOrUpdateBatch" parameterType="com.tockm.entity.po.ChannelInfo">
+		INSERT INTO channel_info(code,channel)values
+		<foreach collection="list" item="item" separator=",">
+			(#{item.code},#{item.channel})
+		</foreach>
+		on DUPLICATE key update
+		code = VALUES(code),
+		channel = VALUES(channel)
+	</insert>
+
+	<!-- 根据主键修改 -->
+	<!-- 根据Id查询 -->
+	<select id="selectById" resultMap="base_result_map">
+		select <include refid="base_column_list"/>
+		from channel_info
+		where id=#{id}
+	</select>
+
+	<!-- 根据Id更新 -->
+	<update id="updateByParam" parameterType="com.tockm.entity.po.ChannelInfo">
+		update channel_info
+		<set>
+			<if test="bean.code!=null">
+				code = #{bean.code},
+			</if>
+			<if test="bean.channel!=null">
+				channel = #{bean.channel},
+			</if>
+		</set>
+		where <include refid="base_query_condition"/>
+	</update>
+
+	<!-- 根据Id删除 -->
+	<delete id="deleteById">
+		delete from channel_info
+		where id=#{id}
+	</delete>
+
+</mapper>
+

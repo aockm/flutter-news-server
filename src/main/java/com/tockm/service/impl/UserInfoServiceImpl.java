@@ -125,7 +125,7 @@ public class UserInfoServiceImpl implements UserInfoService {
 		if (null==userInfo || !userInfo.getPassword().equals(password)) {
 			throw new BusinessException("账号或密码不存在");
 		}
-		List<String> channels = Arrays.asList("dsd","dsd");
+		List<String> channels = Arrays.asList("bbc","bloomberg");
 		UserInfoVo userInfoVo = new UserInfoVo();
 		userInfoVo.setAccessToken("2113");
 		userInfoVo.setDisplayName(userInfo.getUsername());
